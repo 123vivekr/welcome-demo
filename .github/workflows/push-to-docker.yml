@@ -21,6 +21,10 @@ jobs:
         run: ./gradlew test
       - name: Build
         run: ./gradlew build
+      - uses: actions/upload-artifact@master
+        with:
+          name: springdemo-0.0.1-SNAPSHOT.jar 
+          path: ./build/libs/springdemo-0.0.1-SNAPSHOT.jar
   push-to-dockerhub:
     needs: test-and-build
     runs-on: ubuntu-latest
@@ -32,6 +36,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME}}
           password: ${{ secrets.DOCKERHUB_TOKEN}}
+      - uses: actions/download-artifact@master
+        with:
+          name: springdemo-0.0.1-SNAPSHOT.jar 
+          path: ./build/libs/springdemo-0.0.1-SNAPSHOT.jar
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
